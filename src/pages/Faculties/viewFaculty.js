@@ -1,29 +1,56 @@
-import { React, useState } from 'react';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { Avatar } from 'antd';
+import './viewFaculty.css';
 import Footer from '../../components/Footer/Footer';
 import Navbar2 from '../../components/NavBar/Navbar2';
-import './viewFaculty.css';
-import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
-import { message } from 'antd'
 
 export default function ViewFaculty() {
-    const location = useLocation();
-    const { faculties } = location.state;
+  const location = useLocation();
+  const { faculties } = location.state;
 
-    return (
-        <>
-            <div className='main-container'>
-                <Navbar2 />
-                <br />
-                <h1 className="heading">Name: {faculties.FacultyName} <br /></h1>
-                <h1 className="heading">Initial: {faculties.FacultyInitial} <br /></h1>
-                <h1 className="heading">Courses: {faculties.Courses.join(', ')} <br /></h1>
-                <h1 className="heading">E-mail: {faculties.Email} <br /></h1>
-                <h1 className="heading">Extention: {faculties.EXT} <br /></h1>
-                <h1 className="heading">Room: {faculties.Room} <br /></h1>
-                <h1 className="heading">Phone: +880{faculties.Mobile} <br /></h1>
-                <Footer />
+  return (
+    <div>
+      <Navbar2 />
+      <div className="container">
+        <div className="profile-card">
+          <div className="profile-header">
+            <Avatar
+              className="profile-picture"
+              src="https://example.com/profile-picture.jpg"
+              alt="Profile"
+            />
+            <h2 className="profile-name">{faculties.FacultyName}</h2>
+          </div>
+          <div className="profile-details">
+            <div className="profile-info">
+              <span className="profile-label">Initial:</span>
+              <span className="profile-value">{faculties.FacultyInitial}</span>
             </div>
-        </>
-    );
+            <div className="profile-info">
+              <span className="profile-label">Courses:</span>
+              <span className="profile-value">{faculties.Courses.join(', ')}</span>
+            </div>
+            <div className="profile-info">
+              <span className="profile-label">Email:</span>
+              <span className="profile-value">{faculties.Email}</span>
+            </div>
+            <div className="profile-info">
+              <span className="profile-label">Extension:</span>
+              <span className="profile-value">{faculties.EXT}</span>
+            </div>
+            <div className="profile-info">
+              <span className="profile-label">Room:</span>
+              <span className="profile-value">{faculties.Room}</span>
+            </div>
+            <div className="profile-info">
+              <span className="profile-label">Phone:</span>
+              <span className="profile-value">+880{faculties.Mobile}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
 }
