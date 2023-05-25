@@ -36,6 +36,14 @@ export default function ViewCourse() {
               <span className="profile-value">{course.type}</span>
             </div>
           </div>
+          <div className="profile-actions">
+            <button className="btn btn-primary">Add Section</button>
+            <button className="btn btn-primary">Update Course</button>
+            <button
+              className="btn btn-danger"
+              style={{ backgroundColor: 'red' }}
+            >Delete Course</button>
+          </div>
         </div>
       </div>
       <Footer />

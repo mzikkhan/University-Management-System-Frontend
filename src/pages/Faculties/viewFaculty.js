@@ -47,6 +47,9 @@ export default function ViewFaculty() {
               <span className="profile-label">Phone:</span>
               <span className="profile-value">+880{faculties.Mobile}</span>
             </div>
+            <div className="profile-actions">
+            <button className="btn btn-primary">Update Details</button>
+          </div>
           </div>
         </div>
       </div>
