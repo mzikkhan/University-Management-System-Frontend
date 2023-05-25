@@ -1,4 +1,4 @@
-# nsu-admin-backend
+# nsu-admin-frontend
 CSE327 Project
 
 This is the Frontend of our system - built using ReactJS.
@@ -9,4 +9,4 @@ This is the Frontend of our system - built using ReactJS.
 2. Pull the code into a folder called 'frontend'
 3. Type 'cd frontend' into the terminal to navigate to directory containing pulled code
 4. Type 'npm i' into terminal to install dependencies
-5. Type 'npm run server' to run frontend on localhost
+5. Type 'npm run start' to run frontend on localhost
