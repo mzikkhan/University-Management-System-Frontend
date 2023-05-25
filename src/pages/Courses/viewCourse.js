@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Avatar } from 'antd';
 import './viewCourse.css';
 import Footer from '../../components/Footer/Footer';
@@ -8,6 +8,13 @@ import Navbar2 from '../../components/NavBar/Navbar2';
 export default function ViewCourse() {
   const location = useLocation();
   const { course } = location.state;
+
+  // Add new course
+  const navigate = useNavigate()
+  const addSection = () => {
+    navigate("/addSection")
+  }
+
 
   return (
     <div>
@@ -37,7 +44,7 @@ export default function ViewCourse() {
             </div>
           </div>
           <div className="profile-actions">
-            <button className="btn btn-primary">Add Section</button>
+            <button className="btn btn-primary" onClick={addSection}>Add Section</button>
             <button className="btn btn-primary">Update Course</button>
             <button
               className="btn btn-danger"

@@ -14,6 +14,7 @@ import ViewCourse from './pages/Courses/viewCourse';
 import ImportCourses from './pages/Courses/importCourses';
 import ViewFaculty from './pages/Faculties/viewFaculty';
 import AddFaculty from './pages/Faculties/addFaculty';
+import AddSection from './pages/Courses/addSection';
 // The structure holds the building, this file is our building that hosts the flats which are our pages
 
 function App() {
@@ -54,6 +55,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/viewFaculty" element={<ProtectedRoutes Cmp={ViewFaculty} />} ></Route>
+          </Routes>
+          <Routes>
+            <Route path="/addSection" element={<ProtectedRoutes Cmp={AddSection} />} ></Route>
           </Routes>
         </BrowserRouter>
       }
