@@ -5,8 +5,6 @@ import './addCourse.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { message } from 'antd'
-import { useHistory } from 'react-router-dom';
-import Swal from 'sweetalert2';
 const csvtoJson = require("csvtojson");
 
 export default function AddSection() {
@@ -107,6 +105,18 @@ export default function AddSection() {
               />
             </div>
             <div className="am-pm-container">
+              <label htmlFor="type">Select Room:</label>
+              <select id="type" value={sectionRoom} onChange={(e) => setSectionRoom(e.target.value)}>
+                <option value="">Select</option>
+                <option value="SAC_301">SAC 301</option>
+                <option value="SAC_302">SAC 302</option>
+                <option value="SAC_303">SAC 303</option>
+                <option value="SAC_304">SAC 304</option>
+                <option value="SAC_305">SAC 305</option>
+                <option value="SAC_306">SAC 306</option>
+              </select>
+            </div>
+            <div className="am-pm-container">
               <label htmlFor="credits">Select Day:</label>
               <select id="credits" value={sectionDay} onChange={(e) => setSectionDay(e.target.value)}>
                 <option value="">Select</option>
@@ -119,26 +129,14 @@ export default function AddSection() {
               <label htmlFor="credits">Select Time Slot:</label>
               <select id="credits" value={sectionTimeSlot} onChange={(e) => setSectionTimeSlot(e.target.value)}>
                 <option value="">Select</option>
-                <option value="SAC_301">8:00AM - 9:00AM</option>
-                <option value="SAC_302">9:10AM - 10:20AM</option>
-                <option value="SAC_303">10:30AM - 11:30AM</option>
-                <option value="SAC_304">11:40AM - 12:40PM</option>
-                <option value="SAC_305">12:50PM - 1:50PM</option>
-                <option value="SAC_306">2:00PM - 3:00PM</option>
-                <option value="SAC_306">3:10PM - 4:10PM</option>
-                <option value="SAC_306">4:20PM - 5:20PM</option>
-              </select>
-            </div>
-            <div className="am-pm-container">
-              <label htmlFor="type">Select Room:</label>
-              <select id="type" value={sectionRoom} onChange={(e) => setSectionRoom(e.target.value)}>
-                <option value="">Select</option>
-                <option value="SAC_301">SAC 301</option>
-                <option value="SAC_302">SAC 302</option>
-                <option value="SAC_303">SAC 303</option>
-                <option value="SAC_304">SAC 304</option>
-                <option value="SAC_305">SAC 305</option>
-                <option value="SAC_306">SAC 306</option>
+                <option value="SAC_301">08:00 AM - 09:00 AM</option>
+                <option value="SAC_302">09:10 AM - 10:10 AM</option>
+                <option value="SAC_303">10:20 AM - 11:20 AM</option>
+                <option value="SAC_304">11:30 AM - 12:30 PM</option>
+                <option value="SAC_305">12:40 PM - 01:40 PM</option>
+                <option value="SAC_306">01:50 PM - 02:50 PM</option>
+                <option value="SAC_306">03:00 PM - 04:00 PM</option>
+                <option value="SAC_306">04:10 PM - 05:10 PM</option>
               </select>
             </div>
             <button className="btn btn-primary custom-button button2" onClick={addNewSection}>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Avatar } from 'antd';
 import './viewCourse.css';
 import Footer from '../../components/Footer/Footer';
 import Navbar2 from '../../components/NavBar/Navbar2';
