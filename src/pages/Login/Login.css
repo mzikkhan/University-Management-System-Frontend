@@ -1,0 +1,36 @@
+.form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #1144ba;
+}
+
+.login-form {
+    border: 1px solid gray;
+    background-color: #ffffff;
+    padding: 30px;
+    width: 30%;
+}
+
+.loginTitle {
+    color: #1144ba;
+    text-align: center;
+  }
+  
+  .login-form .ant-form-item-label label {
+    color: #1144ba;
+  }
+  
+  .signUpLink {
+    display: block;
+    text-align: center;
+    color: #1144ba;
+  }
+
+  .custom-button {
+    background-color: #1144ba; 
+    color: #FFFFFF;
+  }
+  
+  

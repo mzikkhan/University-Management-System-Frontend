@@ -1,0 +1,53 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+  /* Set a minimum height to occupy the full viewport height */
+  overflow: auto;
+  /* Add scroll behavior if content overflows */
+}
+
+.profile-card {
+  width: 450px;
+  padding: 20px;
+  background-color: #c2d4ff;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  /* Center the profile card within the container */
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-name {
+  font-size: 18px;
+}
+
+.profile-details {
+  margin-bottom: 20px;
+}
+
+.profile-info {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.profile-label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.profile-value {
+  font-weight: normal;
+}

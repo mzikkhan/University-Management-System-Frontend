@@ -1,0 +1,142 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-container {
+  flex-grow: 1;
+}
+
+.footer {
+  margin-top: auto;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1200px;
+  height: 60px;
+  background-color: #d4cfcf;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.search-bar input {
+  width: 80%;
+  height: 100%;
+  padding: 5px;
+  border: none;
+}
+
+.search-bar button {
+  width: 20%;
+  height: 100%;
+  border: none;
+  background-color: #284cda;
+  color: #fff;
+  padding: 5px 10px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+/* Alternatively */
+.searchItem {
+  border: 1px solid lightgray;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.searchItem {
+  border: 1px solid lightgray;
+  padding: 20px;
+  margin-left: 164px;
+  border-radius: 5px;
+  width: 1194px;
+}
+
+.siDesc {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.siSlot {
+  font-size: 15px;
+  align-self: self-start;
+  color: #1144ba;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.siType {
+  font-size: 15px;
+  align-self: self-start;
+  color: #9ca7a3;
+  font-weight: bold;
+}
+
+.siTitle {
+  align-self: self-start;
+  font-size: 35px;
+  color: #1144ba;
+}
+
+.siLogo {
+  align-self: self-start;
+}
+
+.siFacultyButton {
+  background-color: #0800ff;
+  width: 120px;
+  color: white;
+  font-weight: bold;
+  padding: 10px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.siFacultyDropButton {
+  background-color: #ff0000;
+  width: 120px;
+  color: white;
+  font-weight: bold;
+  padding: 10px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.siImg {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.siTotalFaculty {
+  border: 1px solid lightgray;
+  padding: 20px;
+  margin-left: 164px;
+  border-radius: 5px;
+  width: 1194px;
+  font-style: italic;
+  font-weight: bold;
+  font-family: "Arial", sans-serif;
+  /* Specify your desired font family */
+}

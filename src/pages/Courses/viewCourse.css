@@ -1,0 +1,64 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+  /* Set a minimum height to occupy the full viewport height */
+  overflow: auto;
+  /* Add scroll behavior if content overflows */
+}
+
+.profile-card {
+  width: 450px;
+  padding: 20px;
+  background-color: #c2d4ff;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  /* Center the profile card within the container */
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.profile-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.profile-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+}
+
+.profile-label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.profile-value {
+  color: #555;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}

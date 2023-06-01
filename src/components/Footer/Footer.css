@@ -1,0 +1,19 @@
+.footer {
+  width: 100%;
+  font-size: 12px;
+  background-color: #1144ba;
+}
+
+
+.fText {
+  text-align: center;
+  padding-bottom: 20px;
+  color: #fff ;
+  font-size: 15px;
+}
+
+.fText1 {
+  text-align: center;
+  color: #fff ;
+  font-size: 35px;
+}
