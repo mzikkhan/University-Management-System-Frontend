@@ -18,6 +18,7 @@ import AddFaculty from './pages/Faculties/addFaculty';
 import AddSection from './pages/Courses/addSection';
 import AddRoom from './pages/Rooms/addRoom';
 import ViewRoom from './pages/Rooms/viewRoom';
+import UpdateRoom from './pages/Rooms/updateRoom';
 // The structure holds the building, this file is our building that hosts the flats which are our pages
 
 function App() {
@@ -64,6 +65,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/addRoom" element={<ProtectedRoutes Cmp={AddRoom} />} ></Route>
+          </Routes>
+          <Routes>
+            <Route path="/updateRoom" element={<ProtectedRoutes Cmp={UpdateRoom} />} ></Route>
           </Routes>
           <Routes>
             <Route path="/viewRoom" element={<ProtectedRoutes Cmp={ViewRoom} />} ></Route>

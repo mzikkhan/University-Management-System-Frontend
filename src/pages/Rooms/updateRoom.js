@@ -180,7 +180,8 @@ export default function AddRoom() {
                 <Navbar2 />
                 <div className="container">
                     <br />
-                    <h1 className="heading">Create New Room <br /></h1>
+                    <h1 className="heading">working on it Exciting Room <br /></h1>
+                    <h1 className="heading">Update Exciting Room <br /></h1>
                     <br />
                     <div className="container2">
                         <div className="input-container">
@@ -277,20 +278,13 @@ export default function AddRoom() {
                             </ul>
                         </div>)}
                         <button className="btn btn-primary custom-button button2" onClick={addNewRoom}>
-                            Add Room
+                            Update Room
                         </button>
                         <br />
-                        <button className="custom-file-upload">
-                            <label htmlFor="csv-file">Upload Course Data(.csv):</label>
-                            <input type="file" id="csv-file" onChange={handleFileUpload} accept=".csv" />
-                        </button>
+
                     </div>
-                    <br />
-                    <div className="container3">
-                        <button className="custom-file-download" onClick={handleDownloadAndView}>
-                            Download CSV Format *
-                        </button>
-                    </div>
+
+
                 </div>
                 <Footer />
             </div>
