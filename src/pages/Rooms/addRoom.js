@@ -32,7 +32,7 @@ export default function AddRoom() {
                 message.error('All fields are required.');
                 return;
             }
-            if ((AssignFor === 'Academic Classes' || AssignFor === 'Academic Labs') && (!Day || !Time)) {
+            if ((AssignFor === 'Academic Classes' || AssignFor === 'Academic Labs') && (selectedTimeSlot.length === 0)) {
                 message.error('Select Day and Select Timeslot are required for Academic Classes and Academic Labs.');
                 return;
             }

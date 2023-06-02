@@ -1,30 +1,65 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import Footer from '../../components/Footer/Footer';
 import Navbar2 from '../../components/NavBar/Navbar2';
 import './addSection.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { message } from 'antd'
-const csvtoJson = require("csvtojson");
 
 export default function AddSection() {
   const [courseSectionNumber, setCourseSectionNumber] = useState('');
   const [facultyInitial, setFacultyInitial] = useState('');
-  const [sectionDay, setSectionDay] = useState();
+  const [assign, setAssign] = useState('Academic Classes');
   const [sectionRoom, setSectionRoom] = useState('');
   const [sectionTimeSlot, setSectionTimeSlot] = useState('');
   const [isLoading, setIsLoading] = useState(false); // Add a state variable to track loading state
   const [csvData, setCsvData] = useState(null); // Add a state variable to store the uploaded CSV data
-
+  const [roomOptions, setRoomOptions] = useState([]); // State to hold the room options
+  const [timeSlotOptions, setTimeSlotOptions] = useState([]); // State to hold the room options
   // Add new course
   const navigate = useNavigate();
+  // Fetch room options
+  // Fetch room options
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        let assignFor = ""; // Initialize the value of assignFor based on the selected option
+
+        if (assign === "Academic Classes") {
+          assignFor = "Academic Classes";
+        } else if (assign === "Academic Labs") {
+          assignFor = "Academic Labs";
+        }
+
+        if (assignFor !== "") {
+          const response = await axios.get(
+            `http://127.0.0.1:5557/api/rooms/getRooms?AssignFor=${assignFor}`
+          );
+          setRoomOptions(response.data.details); // Set the room options directly from the `details` property
+
+          // Check if a room is already selected
+          if (sectionRoom) {
+            const timeSlotResponse = await axios.get(
+              `http://127.0.0.1:5557/api/rooms/getRooms?roomNameForTimeSlot=${sectionRoom}`
+            );
+            setTimeSlotOptions(timeSlotResponse.data.details); // Set the time slots directly from the `details` property
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching rooms:', error);
+      }
+    };
+
+    fetchRooms();
+  }, [assign, sectionRoom]); // Add `assign` and `sectionRoom` as dependencies
+  // Add `assign` as a dependency to re-fetch rooms whenever it changes
 
   const addNewSection = async () => {
     try {
       setIsLoading(true); // Set loading state to true when the button is clicked
 
       // Check if required fields are filled up
-      if (!courseSectionNumber || !facultyInitial || !sectionDay || !sectionRoom) {
+      if (!courseSectionNumber || !facultyInitial || !sectionRoom) {
         message.error('All fields are required.');
         return;
       }
@@ -44,7 +79,6 @@ export default function AddSection() {
         // type: sectionRoom,
         CourseSectionNumber: courseSectionNumber,
         FacultyInitial: facultyInitial,
-        SectionDay: sectionDay,
         sectionTimeSlot: sectionTimeSlot,
         SectionRoom: sectionRoom,
       });
@@ -86,38 +120,41 @@ export default function AddSection() {
               />
             </div>
             <div className="am-pm-container">
-              <label htmlFor="type">Select Room:</label>
-              <select id="type" value={sectionRoom} onChange={(e) => setSectionRoom(e.target.value)}>
-                <option value="">Select</option>
-                <option value="SAC_301">SAC 301</option>
-                <option value="SAC_302">SAC 302</option>
-                <option value="SAC_303">SAC 303</option>
-                <option value="SAC_304">SAC 304</option>
-                <option value="SAC_305">SAC 305</option>
-                <option value="SAC_306">SAC 306</option>
+              <label htmlFor="credits">Assign For:</label>
+              <select id="credits" value={assign} onChange={(e) => setAssign(e.target.value)}>
+
+                <option value="Academic Classes">Academic Classes</option>
+                <option value="Academic Labs">Academic Labs</option>
               </select>
             </div>
             <div className="am-pm-container">
-              <label htmlFor="credits">Select Day:</label>
-              <select id="credits" value={sectionDay} onChange={(e) => setSectionDay(e.target.value)}>
-                <option value="">Select</option>
-                <option value="ST">ST</option>
-                <option value="MW">MW</option>
-                <option value="RA">RA</option>
+              <label htmlFor="roomInfo">Select Room:</label>
+              <select
+                id="roomInfo"
+                value={sectionRoom}
+                onChange={(e) => setSectionRoom(e.target.value)}
+              >
+                <option value="">-- Select Room --</option>
+                {roomOptions.map((room) => (
+                  <option key={room} value={room}>
+                    {room}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="am-pm-container">
-              <label htmlFor="credits">Select Time Slot:</label>
-              <select id="credits" value={sectionTimeSlot} onChange={(e) => setSectionTimeSlot(e.target.value)}>
-                <option value="">Select</option>
-                <option value="SAC_301">08:00 AM - 09:00 AM</option>
-                <option value="SAC_302">09:10 AM - 10:10 AM</option>
-                <option value="SAC_303">10:20 AM - 11:20 AM</option>
-                <option value="SAC_304">11:30 AM - 12:30 PM</option>
-                <option value="SAC_305">12:40 PM - 01:40 PM</option>
-                <option value="SAC_306">01:50 PM - 02:50 PM</option>
-                <option value="SAC_306">03:00 PM - 04:00 PM</option>
-                <option value="SAC_306">04:10 PM - 05:10 PM</option>
+              <label htmlFor="timeslot">Select Time Slot:</label>
+              <select
+                id="timeslot"
+                value={sectionTimeSlot}
+                onChange={(e) => setSectionTimeSlot(e.target.value)}
+              >
+                <option value="">-- Select Room --</option>
+                {timeSlotOptions.map((timeslot) => (
+                  <option key={timeslot} value={timeslot}>
+                    {timeslot}
+                  </option>
+                ))}
               </select>
             </div>
             <button className="btn btn-primary custom-button button2" onClick={addNewSection}>

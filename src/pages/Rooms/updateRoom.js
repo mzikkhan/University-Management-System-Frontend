@@ -1,157 +1,52 @@
-import { React, useState, useRef } from 'react';
-import Footer from '../../components/Footer/Footer';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
+import { message } from 'antd';
+import axios from 'axios';
 import Navbar2 from '../../components/NavBar/Navbar2';
-import './addRoom.css';
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { message } from 'antd'
-import Swal from 'sweetalert2';
-
-export default function AddRoom() {
-    const [Rooms, setRooms] = useState('');
-    const [RoomNumber, setRoomNumber] = useState();
-    const [AcademicBuilding, setAcademicBuilding] = useState('');
-    const [FloorNumber, setFloorNumber] = useState('');
-    const [AssignFor, setAssignFor] = useState('Academic Classes'); // Set initial value to "Academic Classes"
-    const [Time, setTime] = useState('');
-    const [Day, setDay] = useState('');
-    const [TimeSlot, setTimeSlot] = useState('');
-    const [csvData, setCsvData] = useState(null); // Add a state variable to store the uploaded CSV data
-    const [isLoading, setIsLoading] = useState(false); // Add a state variable to track loading state
-    const csvDataRef = useRef(null);
-    const [selectedTimeSlot, setSelectedTimeSlot] = useState([]);
-    // Add new course
+import Footer from '../../components/Footer/Footer';
+import './updateRoom.css';
+export default function UpdateRoom() {
+    const { Rooms } = useParams();
+    const location = useLocation();
+    const { rooms } = location.state;
     const navigate = useNavigate();
-
-    const addNewRoom = async () => {
-        try {
-            setIsLoading(true); // Set loading state to true when the button is clicked
-
-            // Check if required fields are filled up
-            if (!RoomNumber || !FloorNumber || !AcademicBuilding || !AssignFor) {
-                message.error('All fields are required.');
-                return;
-            }
-            if ((AssignFor === 'Academic Classes' || AssignFor === 'Academic Labs') && (!Day || !Time)) {
-                message.error('Select Day and Select Timeslot are required for Academic Classes and Academic Labs.');
-                return;
-            }
-
-            // Validate room number format
-            let roomNumberRegex;
-            if (FloorNumber == 10) {
-                roomNumberRegex = new RegExp(`^${FloorNumber}\\d{2}?$`); // Regular expression to match exactly 4 digits
-            } else if (FloorNumber >= 1 && FloorNumber <= 9) {
-                roomNumberRegex = new RegExp(`^${FloorNumber}\\d{2}[A-Za-z]?$`); // Regular expression to match floor number followed by 2 digits and an optional letter
-            } else {
-                message.error('Invalid floor selection.');
-                return;
-            }
-
-            if (!roomNumberRegex.test(RoomNumber)) {
-                message.error('Room number format is invalid.');
-                message.error('Invalid floor selection.');
-                return;
-            }
-
-            const roomName = `${AcademicBuilding}${RoomNumber}`; // Combine academic building and room number
-
-            // Check if the room name already exists
-            const existingRooms = await axios.get(`http://127.0.0.1:5557/api/rooms/getRooms`);
-            if (existingRooms.data.success) {
-                const rooms = existingRooms.data.details;
-                if (rooms.some(rooms => rooms.Rooms === roomName)) {
-                    message.error('Room name already exists.');
-                    return;
-                }
-            }
-
-            // Add new course to database
-            const res = await axios.post(`http://127.0.0.1:5557/api/rooms/addRoom`, {
-                Rooms: roomName,
-                RoomNumber: RoomNumber,
-                AcademicBuilding: AcademicBuilding,
-                FloorNumber: FloorNumber,
-                AssignFor: AssignFor,
-                TimeSlot: selectedTimeSlot,
-            });
-            message.success('Room Added Successfully!');
-            navigate('/rooms');
-        } catch (err) {
-            message.error(err.message);
-        }
-    };
-
-    // Handle file upload
-    const handleFileUpload = async (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: true,
-            confirmButtonColor: '#0800ff',
-            cancelButtonColor: '#ff0000',
-        })
-
-        swalWithBootstrapButtons.fire({
-            title: 'Are you sure?',
-            text: 'This will upload your CSV file. Continue?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, upload it!',
-            cancelButtonText: 'No, cancel!',
-            reverseButtons: true
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                setIsLoading(true); // Set loading state to true when the upload is confirmed
-                reader.onload = async () => {
-                    const result = reader.result;
-                    console.log(result); // Print CSV data in console
-                    setCsvData(result);
-
-                    // Upload CSV file to server
-                    try {
-                        const res = await axios.post(`http://127.0.0.1:5557/api/rooms/importCSV`, {
-                            data: result,
-                        });
-                        message.loading('Please wait while the CSV file is being uploaded.');
-                        message.success('CSV file uploaded successfully!');
-                    } catch (err) {
-                        message.error(err.response.data.message || 'Error uploading CSV file.'); // Display the error message
+    const [room, setRoom] = useState(null);
+    const [roomNumber, setRoomNumber] = useState('');
+    const [academicBuilding, setAcademicBuilding] = useState('');
+    const [floorNumber, setFloorNumber] = useState('');
+    const [assignFor, setAssignFor] = useState('');
+    const [isLoading, setIsLoading] = useState(false); // Add a state variable to track loading state
+    const [selectedTimeSlot, setSelectedTimeSlot] = useState([]);
+    const [Day, setDay] = useState("");
+    const [Time, setTime] = useState('');
+    const [TimeSlot, setTimeSlot] = useState('');
+    useEffect(() => {
+        const fetchRoom = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:5557/api/rooms/getRooms?Rooms=${rooms.Rooms}`);
+                if (response.data.success) {
+                    const roomData = response.data.details;
+                    if (roomData.length > 0) {
+                        const room = roomData[0]; // Assuming you only want to update the first room in the array
+                        setRoom(room);
+                        setRoomNumber(room.RoomNumber);
+                        setAcademicBuilding(room.AcademicBuilding);
+                        setFloorNumber(room.FloorNumber);
+                        setAssignFor(room.AssignFor);
+                        setSelectedTimeSlot(room.TimeSlot);
+                    } else {
+                        message.error('No room data found');
                     }
-                    setIsLoading(false); // Set loading state to false when the upload is complete
-                };
-                reader.readAsText(file);
-            } else if (
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'CSV file upload cancelled',
-                    'error'
-                )
+                } else {
+                    message.error(response.data.message);
+                }
+            } catch (error) {
+                message.error('Failed to fetch room data');
             }
-        })
-    };
+        };
 
-    const handleDownloadAndView = () => {
-        const csvContent = `Rooms,RoomNumber,AcademicBuilding,FloorNumber,AssignFor,TimeSlot
-        SAC331,331,SAC,3,Faculty,
-        SAC330,330,SAC,3,Academic Classes,MW 10:20 AM - 11:20 AM
-        SAC329,329,SAC,3,Others,
-        SAC1000,1000,SAC,3,Academic Classes,ST 10:20 AM - 11:20 AM
-        SAC990A,990A,SAC,3,Academic Classes,ST 09:10 AM - 10:10 AM
-        NAC331,331,NAC,3,Faculty,`;
-
-        const blob = new Blob([csvContent], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        csvDataRef.current = url;
-        window.open(url);
-    };
+        fetchRoom();
+    }, [Rooms]);
 
     const handleAddTimeSlot = () => {
         if (Day.trim() !== "" && Time.trim() !== "") {
@@ -162,53 +57,122 @@ export default function AddRoom() {
                 return;
             }
 
-            setSelectedTimeSlot([...selectedTimeSlot, timeSlot]);
+            setSelectedTimeSlot([...selectedTimeSlot, timeSlot]); //The ... syntax is called the spread syntax, and it is used in JavaScript to spread the elements of an array or object. 
             setTimeSlot("");
         }
     };
-
-
 
     const handleDropTimeSlot = (index) => {
         const updatedTimeSlot = [...selectedTimeSlot];
         updatedTimeSlot.splice(index, 1);
         setSelectedTimeSlot(updatedTimeSlot);
     };
+    const handleDropAllTimeSlots = () => {
+        setSelectedTimeSlot([]);
+    };
+
+    const handleUpdateRoom = async () => {
+        try {
+            // Check if required fields are filled up
+            if (!roomNumber || !assignFor) {
+                message.error('All fields are required.');
+                return;
+            }
+            if ((assignFor === 'Academic Classes' || assignFor === 'Academic Labs') && (selectedTimeSlot.length === 0)) {
+                message.error('Select Day and Select Timeslot are required for Academic Classes and Academic Labs.');
+                return;
+            }
+            // Validate room number format
+            let roomNumberRegex;
+            if (floorNumber === '10') {
+                roomNumberRegex = new RegExp(`^${floorNumber}\\d{2}?$`); // Regular expression to match exactly 4 digits
+            } else if (floorNumber >= '1' && floorNumber <= '9') {
+                roomNumberRegex = new RegExp(`^${floorNumber}\\d{2}[A-Za-z]?$`); // Regular expression to match floor number followed by 2 digits and an optional letter
+            } else {
+                message.error('Invalid floor selection.');
+                return;
+            }
+
+            if (!roomNumberRegex.test(roomNumber)) {
+                message.error('Room number format is invalid.');
+                return;
+            }
+
+            const roomName = academicBuilding + roomNumber; // Combine academic building and room number
+            // Check if the room name already exists
+            const existingRooms = await axios.get(`http://127.0.0.1:5557/api/rooms/getRooms`);
+            if (existingRooms.data.success) {
+                const rooms = existingRooms.data.details;
+                const existingRoom = rooms.find((room) => (
+                    room.RoomNumber === roomNumber &&
+                    room.AssignFor === assignFor &&
+                    room.TimeSlot === selectedTimeSlot
+                ));
+
+                if (existingRoom) {
+                    message.error('Room already exists.');
+                    return;
+                }
+            }
+
+            const updatedRoom = {
+                Rooms: roomName,
+                RoomNumber: roomNumber,
+                AcademicBuilding: academicBuilding,
+                FloorNumber: floorNumber,
+                AssignFor: assignFor,
+                TimeSlot: selectedTimeSlot
+            };
+            const response = await axios.put(
+                `http://127.0.0.1:5557/api/rooms/updateRooms/${rooms.Rooms}`,
+                updatedRoom
+            );
+
+            if (response.status === 200) {
+                message.success('Room updated successfully!');
+                navigate('/rooms');
+            } else {
+                message.error('Failed to update room');
+            }
+        } catch (error) {
+            message.error('Failed to update room');
+        }
+    };
+
     return (
         <>
-            <div className='main-container'>
+            <div className="main-container">
                 <Navbar2 />
                 <div className="container">
                     <br />
-                    <h1 className="heading">working on it Exciting Room <br /></h1>
-                    <h1 className="heading">Update Exciting Room <br /></h1>
+                    <div className="move-text">
+                        <p>***Please Drop All TimeSlot's Before Changing Assign For Faculty,Academic Classes,Academic Labs or Others.***</p>
+                    </div>
+                    <h1 className="heading">Update Room</h1>
                     <br />
                     <div className="container2">
                         <div className="input-container">
-                            <label htmlFor="timing">Enter Room Number:</label>
+                            <label htmlFor="roomNumber">Room Number:</label>
                             <input
                                 type="text"
-                                id="code"
-                                value={RoomNumber}
+                                id="roomNumber"
+                                value={roomNumber}
                                 placeholder="e.g. 301, 302 or 507B, 1029"
                                 onChange={(e) => setRoomNumber(e.target.value.toUpperCase())}
                             />
                         </div>
 
-                        <div className="am-pm-container">
-                            <label htmlFor="type">Academic Building:</label>
-                            <select id="type" value={AcademicBuilding} onChange={(e) => setAcademicBuilding(e.target.value)}>
-                                <option value="">Select</option>
-                                <option value="SAC">SAC (South Academic Building)</option>
-                                <option value="NAC">NAC (North Academic Building)</option>
-                                <option value="LIB">LIB (Library Building)</option>
-                            </select>
+                        <div className="input-container">
+                            <label htmlFor="academicBuilding">Academic Building:</label>
+                            <input
+                                type="text"
+                                id="academicBuilding"
+                                value={academicBuilding}
+                            />
                         </div>
-
                         <div className="am-pm-container">
-                            <label htmlFor="credits">Select Floor:</label>
-                            <select id="credits" value={FloorNumber} onChange={(e) => setFloorNumber(e.target.value)}>
-                                <option value="">Select</option>
+                            <label htmlFor="floorNumber">Select Floor:</label>
+                            <select id="floorNumber" value={floorNumber} onChange={(e) => setFloorNumber(e.target.value)}>
                                 {Array.from({ length: 10 }, (_, index) => (
                                     <option key={index} value={index + 1}>{index + 1}</option>
                                 ))}
@@ -217,14 +181,14 @@ export default function AddRoom() {
 
                         <div className="am-pm-container">
                             <label htmlFor="type">Assign For:</label>
-                            <select id="type" value={AssignFor} onChange={(e) => setAssignFor(e.target.value)}>
+                            <select id="type" value={assignFor} onChange={(e) => setAssignFor(e.target.value)}>
                                 <option value="Academic Classes">Academic Classes</option>
                                 <option value="Academic Labs">Academic Labs</option>
                                 <option value="Faculty">Faculty</option>
                                 <option value="Others">Others</option>
                             </select>
                         </div>
-                        {AssignFor === "Academic Classes" && (
+                        {assignFor === "Academic Classes" && (
                             <div className="am-pm-container">
                                 <label htmlFor="day1">Select Day:</label>
                                 <select id="day1" value={Day} onChange={(e) => setDay(e.target.value)}>
@@ -234,7 +198,7 @@ export default function AddRoom() {
                                     <option value="RA">RA</option>
                                 </select>
                             </div>)}
-                        {AssignFor === "Academic Labs" && (
+                        {assignFor === "Academic Labs" && (
                             <div className="am-pm-container">
                                 <label htmlFor="day2">Select Day:</label>
                                 <select id="day2" value={Day} onChange={(e) => setDay(e.target.value)}>
@@ -247,7 +211,7 @@ export default function AddRoom() {
                                     <option value="A">A</option>
                                 </select>
                             </div>)}
-                        {(AssignFor === "Academic Classes" || AssignFor === "Academic Labs") && (
+                        {(assignFor === "Academic Classes" || assignFor === "Academic Labs") && (
                             <div className="am-pm-container">
                                 <label htmlFor="time">Select Timeslot:</label>
                                 <select id="time" value={Time} onChange={(e) => setTime(e.target.value)}>
@@ -263,10 +227,9 @@ export default function AddRoom() {
                                 </select>
                             </div>
                         )}
-
-                        {(AssignFor === "Academic Classes" || AssignFor === "Academic Labs") && (
+                        {(assignFor === "Academic Classes" || assignFor === "Academic Labs") && (
                             <button className="btn btn-primary" onClick={handleAddTimeSlot}>Add</button>)}
-                        {(AssignFor === "Academic Classes" || AssignFor === "Academic Labs") && (<div className="input-container">
+                        {(assignFor === "Academic Classes" || assignFor === "Academic Labs") && (<div className="input-container">
                             <p>Selected TimeSlot:</p>
                             <ul>
                                 {selectedTimeSlot.map((course, index) => (
@@ -275,19 +238,26 @@ export default function AddRoom() {
                                         <button className="ul li button" onClick={() => handleDropTimeSlot(index)}>Drop</button>
                                     </li>
                                 ))}
+
                             </ul>
                         </div>)}
-                        <button className="btn btn-primary custom-button button2" onClick={addNewRoom}>
-                            Update Room
-                        </button>
-                        <br />
-
+                        {(assignFor === "Academic Classes" || assignFor === "Academic Labs") && selectedTimeSlot.length > 0 && (
+                            <div className="input-container">
+                                <button className="btn btn-danger" onClick={handleDropAllTimeSlots}>Drop All</button>
+                            </div>)}
+                        {(assignFor === "Faculty" || assignFor === "Others") && selectedTimeSlot.length > 0 && (
+                            <div className="input-container">
+                                <button className="btn btn-danger" onClick={handleDropAllTimeSlots}>Drop All Timeslot</button>
+                            </div>)}
+                        <div className="btn-container">
+                            <button className="btn btn-primary custom-button button2" onClick={handleUpdateRoom}>
+                                Update
+                            </button>
+                        </div>
                     </div>
-
-
                 </div>
-                <Footer />
             </div>
+            <Footer />
         </>
     );
 }

@@ -95,3 +95,25 @@
     border-radius: 4px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+@keyframes moveLeftToRight {
+    0% {
+        transform: translateX(-120%);
+    }
+
+    100% {
+        transform: translateX(34%);
+    }
+}
+
+.move-text {
+    position: absolute;
+    animation: moveLeftToRight 10s linear infinite;
+    font-family: Arial, sans-serif;
+    /* Change the font family */
+    font-size: 20px;
+    color: red;
+    /* Change the font size */
+    font-weight: bold;
+    /* Add the font weight */
+}

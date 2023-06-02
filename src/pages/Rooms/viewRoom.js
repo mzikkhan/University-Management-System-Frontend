@@ -10,9 +10,11 @@ export default function ViewRoom() {
     const { rooms } = location.state;
 
     const navigate = useNavigate()
-    const updateRoom = () => {
-        navigate(`/updateRoom`)
-    }
+
+    const updateRoom = (rooms) => {
+        navigate('/updateRoom', { state: { rooms: rooms } });
+    };
+
     return (
         <div>
             <Navbar2 />
@@ -54,7 +56,7 @@ export default function ViewRoom() {
                             </div>
                         ) : null}
                         <div className="update-button">
-                            <button className="btn btn-primary" onClick={updateRoom}>
+                            <button className="btn btn-primary" onClick={() => updateRoom(rooms)}>
                                 Update Details
                             </button>
                         </div>
