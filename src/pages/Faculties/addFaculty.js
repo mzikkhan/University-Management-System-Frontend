@@ -54,15 +54,16 @@ export default function AddFaculty() {
   };
 
   const validateFacultyCourses = () => {
-    const courseRegex = /^[A-Za-z]{3}\d{3}$/;
+    const courseRegex = /^[A-Za-z]{3}\d{3}[L]?$/;
     let errorMsg = '';
     selectedCourses.forEach(course => {
       if (!courseRegex.test(course)) {
-        errorMsg = 'Courses should be 6 characters. The first three characters should be string and the last three characters should be integers.';
+        errorMsg = 'Courses should be 6 characters. The first three characters should be a string, the last three characters should be integers, and an optional "L"(LAB) at the end.';
       }
     });
     return errorMsg;
   };
+
 
   const validateFacultyEmail = () => {
     const emailRegex = /^\S+@\S+\.\S+$/;

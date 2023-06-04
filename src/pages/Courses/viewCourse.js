@@ -11,8 +11,9 @@ export default function ViewCourse() {
   // Add new course
   const navigate = useNavigate()
   const addSection = () => {
-    navigate("/addSection")
+    navigate("/addSection", { state: { code: course.code } });
   }
+
 
 
   return (
@@ -41,15 +42,20 @@ export default function ViewCourse() {
               <span className="profile-label">Type:</span>
               <span className="profile-value">{course.type}</span>
             </div>
+            <div className="profile-info">
+              <span className="profile-label">Sections:</span>
+              <span className="profile-value">{course.sections.join(', ')}</span>
+            </div>
           </div>
           <div className="profile-actions" >
             <button className="btn btn-primary" onClick={addSection}>Add Section</button>
-            <button className="btn btn-primary">Update Course</button>
-            <button className="btn btn-danger" style={{ backgroundColor: 'red' }}>Delete Course</button>
+            <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'black' }}>Update Section</button>
+            <button className="btn btn-danger" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'red' }}>Delete Section</button>
+            <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'blue' }}>Update Course</button>
           </div>
         </div>
       </div>
       <Footer />
-    </div>
+    </div >
   );
 }

@@ -76,10 +76,11 @@ export default function Faculties() {
     }
   };
   // Filter faculties based on search value
-  const filteredFaculties = faculties.filter(
-    (faculties) =>
-      faculties.FacultyName.toLowerCase().includes(searchValue.toLowerCase())
+  const filteredFaculties = faculties.filter((faculty) =>
+    faculty.FacultyName.toLowerCase().includes(searchValue.toLowerCase()) ||
+    faculty.FacultyInitial.toLowerCase().includes(searchValue.toLowerCase())
   );
+
 
   return (
     <div className="page-container">

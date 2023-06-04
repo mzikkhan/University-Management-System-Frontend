@@ -111,7 +111,7 @@ export default function Courses() {
               <h1 className="siTitle">{course.title}</h1>
               <span className="siType">{course.type}</span>
               <span className="siSlot">Credits: {course.credits}</span>
-              <span className="siSlot">Sections: {course.sections}</span>
+              <span className="siSlot">Sections: {course.sections.join(', ')}</span>
               <div className="siButtonsContainer">
                 <button className="siCourseButton" onClick={() => viewCourse(course)}>View Course</button>
                 &nbsp;&nbsp;
