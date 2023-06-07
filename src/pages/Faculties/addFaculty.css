@@ -120,3 +120,25 @@ ul li button:hover {
 .input-container p {
     margin-bottom: 8px;
 }
+
+@keyframes moveLeftToRight {
+    0% {
+        transform: translateX(-140%);
+    }
+
+    100% {
+        transform: translateX(50%);
+    }
+}
+
+.move-text2 {
+    position: absolute;
+    animation: moveLeftToRight 5s linear infinite;
+    font-family: Arial, sans-serif;
+    /* Change the font family */
+    font-size: 20px;
+    color: rgb(66, 19, 185);
+    /* Change the font size */
+    font-weight: bold;
+    /* Add the font weight */
+}

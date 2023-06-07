@@ -244,6 +244,8 @@ export default function UpdateRoom() {
                         {(assignFor === "Academic Classes" || assignFor === "Academic Labs") && selectedTimeSlot.length > 0 && (
                             <div className="input-container">
                                 <button className="btn btn-danger" onClick={handleDropAllTimeSlots}>Drop All</button>
+                                <p>Note: Removing the TimeSlot may result in sections becoming illogical. Therefore,
+                                    please ensure to update the sections accordingly based on any changes made.</p>
                             </div>)}
                         {(assignFor === "Faculty" || assignFor === "Others") && selectedTimeSlot.length > 0 && (
                             <div className="input-container">

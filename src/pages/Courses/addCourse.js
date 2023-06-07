@@ -100,7 +100,7 @@ CSE173,Discrete Mathematics,3,MC,,`;
 
     swalWithBootstrapButtons.fire({
       title: 'Are you sure?',
-      text: 'This will upload your CSV file. Continue?',
+      text: 'This will upload your CSV file & Make sure you dont have any Sections value in your CSV file. Continue?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, upload it!',

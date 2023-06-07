@@ -167,8 +167,6 @@ export default function AddRoom() {
         }
     };
 
-
-
     const handleDropTimeSlot = (index) => {
         const updatedTimeSlot = [...selectedTimeSlot];
         updatedTimeSlot.splice(index, 1);

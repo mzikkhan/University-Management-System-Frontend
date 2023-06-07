@@ -1,79 +1,115 @@
-.page-container {
+html,
+body,
+#root {
+    height: 100%;
+}
+
+.main-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100%;
 }
 
-.content-container {
-    flex-grow: 1;
-}
-
-.footer {
-    margin-top: auto;
-}
-
-/* Alternatively */
-.searchItem {
-    border: 1px solid lightgray;
-    padding: 20px;
-    margin-left: 164px;
-    border-radius: 5px;
-    width: 1194px;
-}
-
-.siDesc {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.container {
     flex: 1;
+    padding-bottom: 60px;
+    margin: 20px auto;
+    max-width: 650px;
 }
 
-.siSlot {
-    font-size: 15px;
-    align-self: self-start;
-    color: #000000;
+.heading {
     font-weight: bold;
-    display: flex;
-    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.siType {
-    font-size: 15px;
-    align-self: self-start;
-    color: #9ca7a3;
+.container2 {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+}
+
+.container3 {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-container {
+    margin-bottom: 15px;
+}
+
+.am-pm-container {
+    margin-bottom: 15px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+    color: #555;
+}
+
+select option {
+    color: #555;
+}
+
+select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+
+
+label {
+    display: block;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
-.siTitle {
-    align-self: self-start;
-    font-size: 35px;
-    color: #1144ba;
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-.siLogo {
-    align-self: self-start;
-}
-
-.siCourseButton {
+.button2 {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
     background-color: #0800ff;
-    width: 120px;
-    color: white;
+    color: #fff;
     font-weight: bold;
-    padding: 10px 12px;
-    border: none;
     cursor: pointer;
-    border-radius: 5px;
 }
 
-.siCourseDropButton {
-    background-color: #ff0000;
-    width: 120px;
-    color: white;
-    font-weight: bold;
-    padding: 10px 12px;
-    border: none;
+.button2:hover {
+    background-color: #6541d2;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 8px 5px;
     cursor: pointer;
-    border-radius: 5px;
+    background-color: #f2f2f2;
+    color: #333;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
 .custom-file-download {
@@ -87,11 +123,28 @@
     font-size: 16px;
 }
 
-.container3 {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.custom-file-upload:hover {
+    background-color: #e2e2e2;
+}
+
+@keyframes moveLeftToRight {
+    0% {
+        transform: translateX(-120%);
+    }
+
+    100% {
+        transform: translateX(34%);
+    }
+}
+
+.move-text1 {
+    position: absolute;
+    animation: moveLeftToRight 10s linear infinite;
+    font-family: Arial, sans-serif;
+    /* Change the font family */
+    font-size: 20px;
+    color: rgb(66, 19, 185);
+    /* Change the font size */
+    font-weight: bold;
+    /* Add the font weight */
 }

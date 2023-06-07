@@ -11,10 +11,8 @@ export default function ViewCourse() {
   // Add new course
   const navigate = useNavigate()
   const addSection = () => {
-    navigate("/addSection", { state: { code: course.code } });
+    navigate("/addSection", { state: { code: course.code, credits: course.credits } });
   }
-
-
 
   return (
     <div>

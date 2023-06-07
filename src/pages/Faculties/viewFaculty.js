@@ -44,12 +44,24 @@ export default function ViewFaculty() {
               <span className="profile-value">{faculties.Room}</span>
             </div>
             <div className="profile-info">
+              <span className="profile-label">Office Hour:</span>
+              <span className="profile-value">{faculties.OfficeHour.map((hour, index) => <React.Fragment key={index}>{hour}<br /></React.Fragment>)}</span>
+            </div>
+            <div className="profile-info">
+              <span className="profile-label">Preferred Days :</span>
+              <span className="profile-value">{faculties.PreferredDays.join(', ')}</span>
+            </div>
+            <div className="profile-info">
               <span className="profile-label">Phone:</span>
               <span className="profile-value">+880{faculties.Mobile}</span>
             </div>
+            <div className="profile-info">
+              <span className="profile-label">CreditCount:</span>
+              <span className="profile-value">{faculties.CreditCount}</span>
+            </div>
             <div className="profile-actions">
-            <button className="btn btn-primary">Update Details</button>
-          </div>
+              <button className="btn btn-primary">Update Details</button>
+            </div>
           </div>
         </div>
       </div>
