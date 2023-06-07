@@ -93,10 +93,10 @@ export default function Faculties() {
           <SearchBar onChange={handleSearchValueChange} />
         </div>
         <br />
-        <p className="siTotalFaculty">Total Faculty Members: {filteredFaculties.length}</p> {/* Displaying the count */}
+        <p className="siTotalCourse">Total Faculty Members: {filteredFaculties.length}</p> {/* Displaying the count */}
         {filteredFaculties.map(faculties => (
           <div key={faculties.id} className="searchItem">
-            <img src="" alt="" className="siImg" />
+            <img src={faculties.Image} alt="" className="siImg" />
             <div className="siDesc">
               <h1 className="siTitle">{faculties.FacultyName}</h1>
               <span className="siType">{faculties.FacultyInitial}</span>

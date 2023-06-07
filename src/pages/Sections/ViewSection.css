@@ -1,0 +1,76 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 80vh;
+    /* align-self: center; */
+    /* Set a minimum height to occupy the full viewport height */
+
+    /* Add scroll behavior if content overflows */
+}
+
+.section-card {
+    width: 600px;
+    height: 300px;
+    padding: 20px;
+    background-color: #c2d4ff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    /* Center the section card within the container */
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.section-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.section-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.section-info {
+    display: flex;
+    align-items: center;
+}
+
+.section-label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.section-value {
+    color: #555;
+}
+
+.section-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.section-name {
+    font-size: 40px;
+    margin-top: 15px;
+}
+
+.update-button-section {
+    margin-left: 50px;
+    margin-top: 20px;
+}

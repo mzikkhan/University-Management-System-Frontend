@@ -63,6 +63,10 @@ export default function Courses() {
       course.code.toLowerCase().includes(searchValue.toLowerCase()) ||
       course.title.toLowerCase().includes(searchValue.toLowerCase())
   );
+  // Go to sections page
+  const goToSectionsPage = (code) => {
+    navigate("/sectionPerCourse", { state: { code: code } });
+  };
 
   const dropHandler = async (code) => {
     try {
@@ -111,7 +115,11 @@ export default function Courses() {
               <h1 className="siTitle">{course.title}</h1>
               <span className="siType">{course.type}</span>
               <span className="siSlot">Credits: {course.credits}</span>
-              <span className="siSlot">Sections: {course.sections.join(', ')}</span>
+              <div className="link-button-container">
+                <button className="link-button" onClick={() => goToSectionsPage(course.code)}>
+                  Sections: {course.sections.length > 2 ? course.sections.join(', ') : course.sections}
+                </button>
+              </div>
               <div className="siButtonsContainer">
                 <button className="siCourseButton" onClick={() => viewCourse(course)}>View Course</button>
                 &nbsp;&nbsp;

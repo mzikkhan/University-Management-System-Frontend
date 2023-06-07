@@ -376,7 +376,7 @@ export default function AddSection() {
                 <option value="">-- Select Time Slot -- : Room</option>
                 {timeSlotOptions.map(timeslot => (
                   <option key={timeslot} value={timeslot}>
-                    {`${timeslot} ${availabilityMap[timeslot] !== undefined ? (availabilityMap[timeslot] ? ': Available' : ': Unavailable') : ''}`}
+                    {`${timeslot} ${availabilityMap[timeslot] !== undefined ? (availabilityMap[timeslot] ? ': Available' : ': Unavailable') : 'Loading...'}`}
                   </option>
                 ))}
               </select>

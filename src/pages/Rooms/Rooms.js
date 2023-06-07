@@ -92,12 +92,11 @@ export default function Rooms() {
           <SearchBar onChange={handleSearchValueChange} />
         </div>
         <br />
-        <p className="siTotalRoom">Total Rooms: {filteredRooms.length}</p> {/* Displaying the count */}
+        <p className="siTotalCourse">Total Rooms: {filteredRooms.length}</p> {/* Displaying the count */}
         {filteredRooms.map(rooms => (
           <div key={rooms.id} className="searchItem">
-            <img src="" alt="" className="siImg" />
+            <h1 className="siTitle">{rooms.Rooms}</h1>
             <div className="siDesc">
-              <h1 className="siTitle">{rooms.Rooms}</h1>
               <span className="siSlot">{rooms.AssignFor}</span>
               <span className="siType">{rooms.AcademicBuilding}</span>
 

@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom';
 export default function AddFaculty() {
   const [facultyName, setFacultyName] = useState('');
   const [facultyInitial, setFacultyInitial] = useState('');
+  const [facultyImage, setFacultyImage] = useState('');
   const [facultyCourses, setFacultyCourses] = useState([]);
   const [facultyEmail, setFacultyEmail] = useState('');
   const [facultyExt, setFacultyExt] = useState('');
@@ -39,7 +40,6 @@ export default function AddFaculty() {
         const sortRooms = response.data.details;
         const sortedRooms = sortRooms.sort();
         setRoomOptions(sortedRooms);
-        setRoomOptions(response.data.details); // Set the room options directly from the `details` property
       } catch (error) {
         console.error('Error fetching rooms:', error);
       }
@@ -66,10 +66,29 @@ export default function AddFaculty() {
         console.error('Error fetching course titles:', error);
       }
     };
+
+    const refreshRooms = async () => {
+      try {
+        await fetchRooms();
+      } catch (error) {
+        console.error('Error refreshing rooms:', error);
+      }
+    };
+
     fetchCourseTitles();
     fetchCourseCodes();
     fetchRooms();
+
+    // Add an event listener to the refresh button to call the refreshRooms function
+    const refreshButton = document.getElementById('refreshButton');
+    refreshButton.addEventListener('click', refreshRooms);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      refreshButton.removeEventListener('click', refreshRooms);
+    };
   }, []);
+
 
 
   const validateFacultyName = () => {
@@ -107,9 +126,9 @@ export default function AddFaculty() {
   };
 
   const validateFacultyExt = () => {
-    const extRegex = /^\d{3}$/;
+    const extRegex = /^\d{4}$/;
     if (!extRegex.test(facultyExt)) {
-      return 'Faculty extension should be three digits only.';
+      return 'Faculty extension should be four digits only.';
     }
     return '';
   };
@@ -125,6 +144,9 @@ export default function AddFaculty() {
   const addNewFaculty = async () => {
     try {
       setIsLoading(true); // Set loading state to true when the button is clicked
+
+      // Display loading message
+      const loadingMessage = message.loading('Checking if all data is ok');
 
       // Check if required fields are filled up
       if (!facultyName || !facultyInitial || !selectedCourses || !facultyExt || !facultyEmail || !facultyRoom || !facultyMobile) {
@@ -146,11 +168,23 @@ export default function AddFaculty() {
       // Check if course with provided code or title already exists
       const nameExists = await axios.get(`http://127.0.0.1:5557/api/faculties/getFaculties?FacultyName=${facultyName}`);
       const initialExists = await axios.get(`http://127.0.0.1:5557/api/faculties/getFaculties?FacultyInitial=${facultyInitial}`);
+      const emailExists = await axios.get(`http://127.0.0.1:5557/api/faculties/getFaculties?FacultyEmail=${facultyEmail}`);
+      const mobileExists = await axios.get(`http://127.0.0.1:5557/api/faculties/getFaculties?FacultyMobile=${facultyMobile}`);
+      const EXTExists = await axios.get(`http://127.0.0.1:5557/api/faculties/getFaculties?FacultyEXT=${facultyExt}`);
+      const RoomExists = await axios.get(`http://127.0.0.1:5557/api/faculties/getFaculties?FacultyRoom=${facultyRoom}`);
 
       if (nameExists.data.success && nameExists.data.details.length > 0) {
         message.error(`A faculty with name ${facultyName} already exists.`);
       } else if (initialExists.data.success && initialExists.data.details.length > 0) {
         message.error(`A faculty with initial ${facultyInitial} already exists.`);
+      } else if (emailExists.data.success && emailExists.data.details.length > 0) {
+        message.error(`A faculty with Email ${facultyEmail} already exists.`);
+      } else if (mobileExists.data.success && mobileExists.data.details.length > 0) {
+        message.error(`A faculty with Mobile Number ${facultyMobile} already exists.`);
+      } else if (EXTExists.data.success && EXTExists.data.details.length > 0) {
+        message.error(`A faculty with EXT ${facultyExt} already exists.`);
+      } else if (RoomExists.data.success && RoomExists.data.details.length > 0) {
+        message.error(`A faculty with Office Room ${facultyRoom} already exists.`);
       } else {
         const res = axios.post(`http://127.0.0.1:5557/api/faculties/addFaculty`, {
           FacultyName: facultyName,
@@ -161,13 +195,16 @@ export default function AddFaculty() {
           Room: facultyRoom,
           Mobile: facultyMobile,
           OfficeHour: selectedOfficeHour,
-          PreferredDays: selectedPreferredDays
+          PreferredDays: selectedPreferredDays,
+          Image: facultyImage,
         });
         message.success("Faculty Added Successfully!")
         navigate("/faculties");
       }
     } catch (err) {
       message.error(err.message);
+    } finally {
+      loadingMessage(); // Hide the loading message in case of any error
     }
   };
 
@@ -289,6 +326,15 @@ export default function AddFaculty() {
                 id="FacultyInitial"
                 value={facultyInitial}
                 onChange={(e) => setFacultyInitial(e.target.value)}
+              />
+            </div>
+            <div className="input-container">
+              <label htmlFor="facultyInfo">Enter Faculty Image Link:</label>
+              <input
+                type="text"
+                id="FacultyImage"
+                value={facultyImage}
+                onChange={(e) => setFacultyImage(e.target.value)}
               />
             </div>
             <div className="am-pm-container">
@@ -436,7 +482,9 @@ export default function AddFaculty() {
                 ))}
               </select>
             </div>
-
+            <button id="refreshButton" style={{ backgroundColor: 'black', color: 'white' }}>
+              Refresh
+            </button>
             <div className="input-container">
               <label htmlFor="facultyInfo">Mobile(+880):</label>
               <input

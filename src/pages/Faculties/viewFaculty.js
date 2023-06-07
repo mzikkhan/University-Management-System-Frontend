@@ -17,7 +17,7 @@ export default function ViewFaculty() {
           <div className="profile-header">
             <Avatar
               className="profile-picture"
-              src="https://example.com/profile-picture.jpg"
+              src={faculties.Image}
               alt="Profile"
             />
             <h2 className="profile-name">{faculties.FacultyName}</h2>

@@ -46,7 +46,7 @@ export default function ViewCourse() {
             </div>
           </div>
           <div className="profile-actions" >
-            <button className="btn btn-primary" onClick={addSection}>Add Section</button>
+            <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px' }} onClick={addSection}>Add Section</button>
             <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'black' }}>Update Section</button>
             <button className="btn btn-danger" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'red' }}>Delete Section</button>
             <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'blue' }}>Update Course</button>

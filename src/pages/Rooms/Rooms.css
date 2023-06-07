@@ -79,11 +79,15 @@
 .siTotalRoom {
   border: 1px solid lightgray;
   padding: 20px;
-  margin-left: 164px;
+  margin-left: 104px;
   border-radius: 5px;
   width: 1194px;
   font-style: italic;
   font-weight: bold;
   font-family: "Arial", sans-serif;
   /* Specify your desired font family */
+}
+
+.siTotalRoom {
+  max-width: 1000px;
 }

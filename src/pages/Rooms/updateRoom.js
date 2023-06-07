@@ -58,7 +58,10 @@ export default function UpdateRoom() {
             }
 
             setSelectedTimeSlot([...selectedTimeSlot, timeSlot]); //The ... syntax is called the spread syntax, and it is used in JavaScript to spread the elements of an array or object. 
+            setDay("");
+            setTime("");
             setTimeSlot("");
+
         }
     };
 
