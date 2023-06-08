@@ -203,9 +203,10 @@ export default function AddFaculty() {
       }
     } catch (err) {
       message.error(err.message);
-    } finally {
-      loadingMessage(); // Hide the loading message in case of any error
     }
+    // finally {
+    //   loadingMessage(); // Hide the loading message in case of any error
+    // }
   };
 
   const handleAddCourse = () => {
