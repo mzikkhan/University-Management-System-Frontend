@@ -1,73 +1,85 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable'
 
-const CoursesTable = () => {
-    const [courses, setCourses] = useState([]);
+const CourseRoutineTable = (props) => {
+  const [routineData, setRoutineData] = useState([]);
+  const courseCode = props.courseCode;
 
-    useEffect(() => {
-        // Fetch course data from API
-        async function fetchCourses() {
-            try {
-                const response = await axios.get('your-api-endpoint');
-                setCourses(response.data);
-            } catch (error) {
-                console.error('Error fetching course data:', error);
-            }
-        }
+  useEffect(() => {
+    // Fetch room routine data from API
+    async function fetchRoutineData() {
+      try {
+        const response = await axios.get(`http://127.0.0.1:5557/api/course/getRoutine/${courseCode}`);
+        setRoutineData(response.data);
+      } catch (error) {
+        console.error('Error fetching room routine data:', error);
+      }
+    }
 
-        fetchCourses();
-    }, []);
+    fetchRoutineData();
+  }, []);
 
-    const handleDownloadPDF = () => {
-        const doc = new jsPDF();
+  const handleDownloadPDF = () => {
+    const headers = [['Section', 'Time']];
 
-        // Define table headers
-        const headers = [['Name', 'Description', 'Duration', 'Instructor']];
+    const sortedArray = []
+    routineData.forEach((data) => {
+        const array1 = []
+        array1.push(data.Course_Section)
+        array1.push(data.TimeSlot)
+        sortedArray.push(array1)
+    })
+    console.log(sortedArray)
 
-        // Generate table rows dynamically
-        const rows = courses.map(course => [
-            course.name,
-            course.description,
-            course.duration,
-            course.instructor
-        ]);
+    // //  Generate table rows dynamically
+    // const generateRows = (array) => {
+    //     const rows = 
+    // };
+    // const rows = generateRows(sortedArray);
+    const rows = sortedArray
+    
+    const doc = new jsPDF('p', 'pt');
+    
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Course: ${courseCode}`, doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+    
+    // Set equal widths for each header column
+    const columnWidths = Array(headers[0].length).fill('*');
+    
+    doc.autoTable({
+      head: headers,
+      body: rows,
+      columnStyles: {
+        0: { cellWidth: 'auto' }, // Adjust the cell width as needed
+        1: { cellWidth: 'auto' },
+        2: { cellWidth: 'auto' },
+        3: { cellWidth: 'auto' },
+        4: { cellWidth: 'auto' },
+        5: { cellWidth: 'auto' },
+        6: { cellWidth: 'auto' },
+        7: { cellWidth: 'auto' },
+        8: { cellWidth: 'auto' },
+        9: { cellWidth: 'auto' },
+      },
+      margin: { top: 30 },
+      startY: 30,
+      headerWidths: columnWidths,
+    });
+    
+    doc.save('course_sections_routine.pdf');
+  };
+  
+  
 
-        // Insert table headers and rows into the PDF document
-        doc.autoTable({
-            head: headers,
-            body: rows,
-        });
-
-        // Save the PDF document
-        doc.save('courses.pdf');
-    };
-
-    return (
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Duration</th>
-                        <th>Instructor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {courses.map(course => (
-                        <tr key={course.id}>
-                            <td>{course.name}</td>
-                            <td>{course.description}</td>
-                            <td>{course.duration}</td>
-                            <td>{course.instructor}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <button onClick={handleDownloadPDF}>Download as PDF</button>
-        </div>
-    );
+  return (
+    <div>
+      <button onClick={handleDownloadPDF}>Download Routine</button>
+    </div>
+  );
 };
 
-export default CoursesTable;
+export default CourseRoutineTable;

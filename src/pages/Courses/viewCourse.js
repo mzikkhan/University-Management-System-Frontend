@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './viewCourse.css';
 import Footer from '../../components/Footer/Footer';
 import Navbar2 from '../../components/NavBar/Navbar2';
+import CourseRoutineTable from '../../components/courseTable';
 
 export default function ViewCourse() {
   const location = useLocation();
@@ -52,6 +53,7 @@ export default function ViewCourse() {
             <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'blue' }}>Update Course</button>
           </div>
         </div>
+        <CourseRoutineTable courseCode={course.code}/>
       </div>
       <Footer />
     </div >
