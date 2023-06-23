@@ -136,11 +136,20 @@ export default function AddSection() {
     fetchAvailability();
   }, [sectionTimeSlot]);
 
+  const getCreditCountForFaculty = async (facultyInitial) => {
+    const res = await axios.get(`http://127.0.0.1:5557/api/faculties/getFaculties?creditCountFor=${facultyInitial}`);
+    const creditCount = res.data.details;
+    if (res.status === 200) {
+      return creditCount;
+    } else {
+      throw new Error('Failed to get credit count for faculty');
+    }
+  };
 
 
   const addNewSection = async () => {
     try {
-      setIsLoading(true); // Set loading state to true when the button is clicked
+
 
       // Check if required fields are filled up
       if (!sectionNumber || !facultyInitial || !sectionRoom || !sectionTimeSlot) {
@@ -208,31 +217,28 @@ export default function AddSection() {
       //   message.error('Already exists. Time is clashing with another section.');
       //   return;
       // }
+      const loadingMessage = message.loading('Please wait until the section is successfully added.', 0);
+
+      const creditCount = await getCreditCountForFaculty(facultyInitial);
+
+      if (creditCount >= 11) {
+        setTimeout(loadingMessage, 1.5 * 1000);
+        message.error(`Faculty: ${facultyInitial} cannot be assigned more than 11 credits.`);
+        return;
+      }
 
       if (
         facultyInitial &&
         preferredDaysMap[facultyInitial] &&
         !preferredDaysMap[facultyInitial].includes(day)
       ) {
+        setTimeout(loadingMessage, 1.5 * 1000);
         message.error(
           "Assign TimeSlot based on faculty's Preferred Days. Please choose another timeslot."
         );
         return;
       }
-      if (sectionsWithSameRoomAndTimeSlot.length > 0) {
-        const duplicateCourseSections = sectionsWithSameRoomAndTimeSlot.map(section => section.Course_Section);
-        message.warning(`Same room and timeslot already exist for ${duplicateCourseSections.join(', ')}. Please choose a different room or timeslot for this section.`);
-        return;
-      }
 
-      if (sectionsWithSameInititalAndTimeSlot.length > 0) {
-        const duplicateCourse = sectionsWithSameInititalAndTimeSlot.map(section => section.Course_Section);
-        const duplicateIntital = sectionsWithSameInititalAndTimeSlot.map(section => section.FacultyInitial);
-        const duplicateTimeslot = sectionsWithSameInititalAndTimeSlot.map(section => section.TimeSlot);
-        message.warning(`The selected faculty (${duplicateIntital.join(', ')}) is not available during the ${duplicateTimeslot.join(', ')} time slot(s).
-        ${duplicateCourse.join(', ')} is already assigned for the ${duplicateTimeslot.join(', ')} time slot(s). Please choose a different room or time slot for this section.`);
-        return;
-      }
       // Check if section with the same Course_Section already exists
       const checkDuplicateCourseSection = await axios.get(`http://127.0.0.1:5557/api/sections/getSections`, {
         params: {
@@ -245,17 +251,72 @@ export default function AddSection() {
       });
 
       if (sameCourse_Section.length > 0) {
+        setTimeout(loadingMessage, 1.5 * 1000);
         message.warning(`Section ${Course_Section} already exists. Please choose a different section number for this course.`);
         return;
       }
 
+      if (sectionsWithSameRoomAndTimeSlot.length > 0) {
+        const duplicateCourseSections = sectionsWithSameRoomAndTimeSlot.map(section => section.Course_Section);
+        setTimeout(loadingMessage, 1.5 * 1000);
+        message.warning(`Same room and timeslot already exist for ${duplicateCourseSections.join(', ')}.Please choose a different room or timeslot for this section.`);
+        return;
+      }
+
+      if (sectionsWithSameInititalAndTimeSlot.length > 0) {
+        const duplicateCourse = sectionsWithSameInititalAndTimeSlot.map(section => section.Course_Section);
+        const duplicateIntital = sectionsWithSameInititalAndTimeSlot.map(section => section.FacultyInitial);
+        const duplicateTimeslot = sectionsWithSameInititalAndTimeSlot.map(section => section.TimeSlot);
+        setTimeout(loadingMessage, 1.5 * 1000);
+        message.warning(`The selected faculty(${duplicateIntital.join(', ')}) is not available during the ${duplicateTimeslot.join(', ')} time slot(s).
+          ${duplicateCourse.join(', ')} is already assigned for the ${duplicateTimeslot.join(', ')} time slot(s).Please choose a different room or time slot for this section.`);
+        return;
+      }
+
+
       const getCourseRes = await axios.get(`http://127.0.0.1:5557/api/course/getCourses?code=${code}`);
 
       if (getCourseRes.data.details.length === 0) {
+        setTimeout(loadingMessage, 1.5 * 1000);
         message.error('Course not found.');
         return;
       }
       const course = getCourseRes.data.details[0];
+
+      // Update the course with the new section
+      const updatedSections = course.sections || []; // Assign an empty array if sections is undefined
+
+      if (sectionNumber && !updatedSections.includes(sectionNumber)) {
+        updatedSections.push(sectionNumber); // Add the new section number to the sections array if it doesn't already exist
+      }
+      const updateCreditCount = await axios.get(`http://127.0.0.1:5557/api/course/getCredits/${code}`);
+      const currentCreditCount = Number(updateCreditCount.data.credits);
+      const creditCountNumber = isNaN(creditCount) ? 0 : Number(creditCount); // Parse creditCount as a number
+
+      if (isNaN(creditCountNumber)) {
+        setTimeout(loadingMessage, 1.5 * 1000);
+        message.error('Invalid credit count.');
+        return;
+      }
+
+      const updatedCreditCount = currentCreditCount + creditCountNumber;
+
+      if (isNaN(updatedCreditCount)) {
+        setTimeout(loadingMessage, 1.5 * 1000);
+        message.error('Invalid credit count.');
+        return;
+      }
+
+      if (updatedCreditCount >= 11.1) {
+        setTimeout(loadingMessage, 1.5 * 1000);
+        message.error(`Faculty: ${facultyInitial} is already assigned ${creditCount} credits,By adding ${code} which is ${currentCreditCount} credits will exit faculties 11 credit limits.`);
+        return;
+      }
+      let updateFacultyCreditCount = 0;
+      if (facultyInitial !== "TBA") {
+        updateFacultyCreditCount = await axios.put(`http://127.0.0.1:5557/api/faculties/updateCreditCount?FacultyInitial=${facultyInitial}&CreditCount=${updatedCreditCount}`);
+      }
+
       // Add new section to database
       const res = await axios.post(`http://127.0.0.1:5557/api/sections/addSection`, {
         Course_Section: Course_Section,
@@ -266,26 +327,29 @@ export default function AddSection() {
         TimeSlot: sectionTimeSlot,
       });
 
-      // Update the course with the new section
-      const updatedSections = course.sections || []; // Assign an empty array if sections is undefined
-
-      if (sectionNumber && !updatedSections.includes(sectionNumber)) {
-        updatedSections.push(sectionNumber); // Add the new section number to the sections array if it doesn't already exist
-      }
-      const loadingMessage = message.loading('Please wait until the section is successfully added.', 0);
       const updateCourseRes = await axios.put(`http://127.0.0.1:5557/api/course/updateCourse/${code}`, {
         sections: updatedSections.filter(Boolean) // Filter out any empty values from the sections array
       });
 
       // Fetch the course data
-      if (updateCourseRes.status === 200 && res.status === 200) {
-
-        message.success('Section Added Successfully!');
-        setTimeout(loadingMessage, 1.5 * 1000);
-        navigate('/courses');
+      if (facultyInitial !== "TBA") {
+        if (updateCourseRes.status === 200 && res.status === 200 && updateFacultyCreditCount.status === 200 && updateCreditCount.status === 200) {
+          message.success('Section Added Successfully!');
+          setTimeout(loadingMessage, 1.5 * 1000);
+          navigate('/courses');
+        } else {
+          setTimeout(loadingMessage, 1.5 * 1000);
+          message.error('Failed to update course with the new section.');
+        }
       } else {
-
-        message.error('Failed to update course with the new section.');
+        if (updateCourseRes.status === 200 && res.status === 200 && updateCreditCount.status === 200) {
+          message.success('Section Added Successfully!');
+          setTimeout(loadingMessage, 1.5 * 1000);
+          navigate('/courses');
+        } else {
+          setTimeout(loadingMessage, 1.5 * 1000);
+          message.error('Failed to update course with the new section.');
+        }
       }
     } catch (err) {
 

@@ -10,12 +10,11 @@ import Swal from 'sweetalert2';
 // This Page displays all the Sections
 
 // SearchBar component
-const SearchBar = () => {
+const SearchBar = ({ onChange }) => {
   return (
     <div className="search-bar">
-      {/* Add your search bar JSX here */}
-      <input type="text" placeholder="Search Section Number or Course..." />
-      <button className='search-button'>Search</button>
+      <input type="text" placeholder="Search Courses..." onChange={(e) => onChange(e.target.value)} />
+      <button>Search</button>
     </div>
   );
 };
@@ -67,7 +66,12 @@ export default function Sections() {
   //   (Course) =>
   //     Course.code.includes(searchValue)
   // );
-
+  const filteredSections = sections.filter(
+    (section) =>
+      section.Course.toLowerCase().includes(searchValue.toLowerCase()) ||
+      section.FacultyInitial.toLowerCase().includes(searchValue.toLowerCase()) ||
+      section.TimeSlot.toLowerCase().includes(searchValue.toLowerCase())
+  );
   return (
     <div className="page-container">
       <Navbar2 />
@@ -76,9 +80,9 @@ export default function Sections() {
           <SearchBar onChange={handleSearchValueChange} />
         </div>
         <br />
-        <p className="siTotalCourse">Total Sections: {sections.length}</p> {/* Displaying the count */}
-        {sections.map(section => (
-          <div key={section.Course} className="searchItem">
+        <p className="siTotalCourse">Total Sections:  {filteredSections.length}</p> {/* Displaying the count */}
+        {filteredSections.map(section => (
+          <div key={section.id} className="searchItem">
             <h1 className="siLogo">{section.Course}</h1>
             <div className="siDesc">
               <h1 className="siTitle">Section No. {section.SectionNumber}</h1>

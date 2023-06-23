@@ -105,18 +105,6 @@ export default function AddFaculty() {
     return '';
   };
 
-  const validateFacultyCourses = () => {
-    const courseRegex = /^[A-Za-z]{3}\d{3}[L]?$/;
-    let errorMsg = '';
-    selectedCourses.forEach(course => {
-      if (!courseRegex.test(course)) {
-        errorMsg = 'Courses should be 6 characters. The first three characters should be a string, the last three characters should be integers, and an optional "L"(LAB) at the end.';
-      }
-    });
-    return errorMsg;
-  };
-
-
   const validateFacultyEmail = () => {
     const emailRegex = /^\S+@\S+\.\S+$/;
     if (!emailRegex.test(facultyEmail)) {
@@ -156,7 +144,6 @@ export default function AddFaculty() {
       const errors = [
         validateFacultyName(),
         validateFacultyInitial(),
-        validateFacultyCourses(),
         validateFacultyEmail(),
         validateFacultyExt(),
         validateFacultyMobile(),
@@ -197,6 +184,7 @@ export default function AddFaculty() {
           OfficeHour: selectedOfficeHour,
           PreferredDays: selectedPreferredDays,
           Image: facultyImage,
+          CreditCount: 0
         });
         message.success("Faculty Added Successfully!")
         navigate("/faculties");

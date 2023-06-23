@@ -68,7 +68,7 @@ export default function Courses() {
     navigate("/sectionPerCourse", { state: { code: code } });
   };
 
-  const dropHandler = async (code) => {
+  const dropHandler = async (code, courseSections) => {
     try {
       const confirmDrop = await Swal.fire({
         title: 'Are you sure?',
@@ -79,21 +79,49 @@ export default function Courses() {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
       });
+
+      if (courseSections.length !== 0) {
+        Swal.fire(
+          'Failed to delete sections',
+          'Please delete the sections manually before deleting the course.',
+          'error'
+        );
+        return; // Exit the function since sections cannot be deleted
+      }
       if (confirmDrop.isConfirmed) {
         const response = await axios.delete(`http://127.0.0.1:5557/api/course/dropCourse/` + code);
+        const response1 = await axios.delete(`http://127.0.0.1:5557/api/sections/dropSectionByCourseCode/` + code)
+          .catch((error) => {
+            console.error('Error deleting sections:', error);
+          });
+
         console.log(response);
-        // Update the courses state with the updated courses data from the server
-        setCourses(response.data.details);
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        );
+        console.log(response1);
+
+        // Check if response has valid data
+        if (response.data && response.data.details) {
+          // Update the courses state with the updated courses data from the server
+          setCourses(response.data.details);
+
+          Swal.fire(
+            'Deleted!',
+            'Course has been deleted.',
+            'success'
+          );
+        } else {
+          Swal.fire(
+            'Deleted!',
+            'Course has been deleted.',
+            'success'
+          );
+        }
       }
     } catch (error) {
       console.error('Error deleting course:', error);
     }
   };
+
+
 
 
   return (
@@ -117,13 +145,13 @@ export default function Courses() {
               <span className="siSlot">Credits: {course.credits}</span>
               <div className="link-button-container">
                 <button className="link-button" onClick={() => goToSectionsPage(course.code)}>
-                  Sections: {course.sections.length > 2 ? course.sections.join(', ') : course.sections}
+                  Sections: {course.sections.length > 1 ? course.sections.join(', ') : course.sections}
                 </button>
               </div>
               <div className="siButtonsContainer">
                 <button className="siCourseButton" onClick={() => viewCourse(course)}>View Course</button>
                 &nbsp;&nbsp;
-                <button className="siCourseDropButton" onClick={() => dropHandler(course.code)}>Drop</button>
+                <button className="siCourseDropButton" onClick={() => dropHandler(course.code, course.sections)}>Drop</button>
               </div>
             </div>
           </div>

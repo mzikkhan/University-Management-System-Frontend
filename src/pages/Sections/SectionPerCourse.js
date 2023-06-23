@@ -39,7 +39,7 @@ export default function SectionPerCourse() {
         navigate('/viewSection', { state: { section: section } });
     };
 
-    const dropHandler = async (Course, SectionNumber) => {
+    const dropHandler = async (Course, SectionNumber, FacultyInitial) => {
         try {
             const confirmDrop = await Swal.fire({
                 title: 'Are you sure?',
@@ -51,12 +51,38 @@ export default function SectionPerCourse() {
                 confirmButtonText: 'Yes, delete it!'
             });
             if (confirmDrop.isConfirmed) {
-                const response = await axios.delete(`http://127.0.0.1:5557/api/sections/dropSection/${Course}/${SectionNumber}`);
-                console.log(response);
-                setSections(response.data.details);
+                if (FacultyInitial !== "TBA") {
+                    const response = await axios.delete(`http://127.0.0.1:5557/api/sections/dropSection/${Course}/${SectionNumber}`);
+                    const response1 = await axios.delete(`http://127.0.0.1:5557/api/course/dropSection?CourseCode=${Course}&Section=${SectionNumber}`);
+                    const response2 = await axios.get(`http://127.0.0.1:5557/api/course/getCredits/${Course}`);
+                    const response3 = await axios.get(`http://127.0.0.1:5557/api/faculties/getFaculties?creditCountFor=${FacultyInitial}`);
+
+                    let currentCreditCount = Number(response3.data.details);
+                    const creditCountNumber = Number(response2.data.credits); // Parse creditCount as a number
+
+                    if (isNaN(currentCreditCount)) {
+                        Swal.fire(
+                            'Invalid Credit Count!',
+                            'Unable to retrieve current credit count.',
+                            'warning'
+                        );
+                        return;
+                    }
+
+                    const updatedCreditCount = currentCreditCount - creditCountNumber;
+                    const response5 = await axios.put(`http://127.0.0.1:5557/api/faculties/updateCreditCount?FacultyInitial=${FacultyInitial}&CreditCount=${updatedCreditCount}`);
+
+                    console.log(response);
+                    setSections(response.data.details && response1.data.details && response2.data.details && response3.data.details && response5.data.details);
+                } else {
+                    const response = await axios.delete(`http://127.0.0.1:5557/api/sections/dropSection/${Course}/${SectionNumber}`);
+                    const response1 = await axios.delete(`http://127.0.0.1:5557/api/course/dropSection?CourseCode=${Course}&Section=${SectionNumber}`);
+                    console.log(response);
+                    setSections(response.data.details && response1.data.details && response2.data.details && response3.data.details && response5.data.details);
+                }
                 Swal.fire(
                     'Deleted!',
-                    'Your file has been deleted.',
+                    'Section has been deleted.',
                     'success'
                 ).then(() => {
                     // Reload the page after the "OK" button is clicked
@@ -67,6 +93,7 @@ export default function SectionPerCourse() {
             console.error('Error deleting section:', error);
         }
     };
+
 
     return (
         <div>
@@ -91,7 +118,7 @@ export default function SectionPerCourse() {
                                         <div className="siSectionButtonsContainer">
                                             <button className="siSectionButton" onClick={() => viewSection(section.Course, section.SectionNumber)}>View Section</button>
                                             &nbsp;&nbsp;
-                                            <button className="siSectionDropButton" onClick={() => dropHandler(section.Course, section.SectionNumber)}>Drop</button>
+                                            <button className="siSectionDropButton" onClick={() => dropHandler(section.Course, section.SectionNumber, section.FacultyInitial)}>Drop</button>
                                         </div>
                                     </div>
                                 </div>

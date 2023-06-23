@@ -49,11 +49,12 @@ export default function Faculties() {
   const handleSearchValueChange = (value) => {
     setSearchValue(value);
   };
-  const dropHandlerFaculty = async (initial) => {
+
+  const dropHandlerFaculty = async (initial, creditCount) => {
     try {
       const confirmDrop = await Swal.fire({
         title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        text: "You won't be able to revert this! & All the related sections will be deleted!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#0800ff',
@@ -61,13 +62,18 @@ export default function Faculties() {
         confirmButtonText: 'Yes, delete it!'
       });
       if (confirmDrop.isConfirmed) {
-        const response = await axios.delete(`http://127.0.0.1:5557/api/faculties/dropFaculty/` + initial);
-        console.log(response);
-        // Update the faculty state with the updated faculties data from the server
-        setFaculty(response.data.details);
+        if (Number(creditCount) !== 0) {
+          const response = await axios.delete(`http://127.0.0.1:5557/api/faculties/dropFaculty/` + initial);
+          const response1 = await axios.delete(`http://127.0.0.1:5557/api/sections/dropSectionByFacultyInitial/` + initial);
+          setFaculty(response.data.details);
+        } else {
+          const response = await axios.delete(`http://127.0.0.1:5557/api/faculties/dropFaculty/` + initial);
+          setFaculty(response.data.details);
+        }
+
         Swal.fire(
           'Deleted!',
-          'Your file has been deleted.',
+          'Faculty Info has been deleted.',
           'success'
         );
       }
@@ -75,6 +81,8 @@ export default function Faculties() {
       console.error('Error deleting course:', error);
     }
   };
+
+
   // Filter faculties based on search value
   const filteredFaculties = faculties.filter((faculty) =>
     faculty.FacultyName.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -108,7 +116,7 @@ export default function Faculties() {
               <div className="siButtonsContainer">
                 <button className="siFacultyButton" onClick={() => viewFaculty(faculties)}>View Faculty</button>
                 &nbsp;&nbsp;
-                <button className="siFacultyDropButton" onClick={() => dropHandlerFaculty(faculties.FacultyInitial)}>Drop</button>
+                <button className="siFacultyDropButton" onClick={() => dropHandlerFaculty(faculties.FacultyInitial, faculties.CreditCount)}>Drop</button>
               </div>
             </div>
           </div>
