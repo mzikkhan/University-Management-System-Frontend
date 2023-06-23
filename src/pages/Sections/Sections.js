@@ -44,28 +44,61 @@ export default function Sections() {
     fetchData();
   }, []);
 
-  // // Add new course
-  // const navigate = useNavigate()
-  // const addCourse = () => {
-  //   navigate("/addCourse")
-  // }
-
-  // // View Course
-  // const viewSection = (course) => {
-  //   navigate('/viewSection', { state: { course: course } });
-  // };
-
   // Search functionality
   const [searchValue, setSearchValue] = useState("");
   const handleSearchValueChange = (value) => {
     setSearchValue(value);
   };
 
-  // Filter courses based on search value
-  // const filteredSections = sections.filter(
-  //   (Course) =>
-  //     Course.code.includes(searchValue)
-  // );
+  // View Sections
+  const navigate = useNavigate()
+  const viewSection = (section) => {
+    navigate('/viewSection', { state: { section: section } });
+  };
+
+  // Delete Section
+  const dropHandler = async (code, section) => {
+    try {
+      const confirmDrop = await Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#0800ff',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      });
+      if (confirmDrop.isConfirmed) {
+        const response = await axios.delete(`http://127.0.0.1:5557/api/sections/dropSection/${code}/${section}`)
+          .catch((error) => {
+            console.error('Error deleting sections:', error);
+          });
+
+        console.log(response);
+
+        // Check if response has valid data
+        if (response.data && response.data.details) {
+
+          Swal.fire(
+            'Deleted!',
+            'Section has been deleted.',
+            'success'
+          );
+          window.location.reload()
+        } else {
+          Swal.fire(
+            'Deleted!',
+            'Section has been deleted.',
+            'success'
+          );
+          window.location.reload()
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting Section:', error);
+    }
+  };
+
   const filteredSections = sections.filter(
     (section) =>
       section.Course.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -91,9 +124,9 @@ export default function Sections() {
               <span className="siSlot">Academic Building: {section.AcademicBuilding}</span>
               <span className="siSlot">Room: {section.Room}</span>
               <div className="siButtonsContainer">
-                {/* <button className="siCourseButton" onClick={() => viewCourse(course)}>View Course</button> */}
-                {/* &nbsp;&nbsp; */}
-                {/* <button className="siCourseDropButton" onClick={() => dropHandler(course.code)}>Drop</button> */}
+                <button className="siCourseButton" onClick={() => viewSection(section)}>View Section</button>
+                &nbsp;&nbsp;
+                <button className="siCourseDropButton" onClick={() => dropHandler(section.Course, section.SectionNumber)}>Delete</button>
               </div>
             </div>
           </div>

@@ -22,6 +22,7 @@ import UpdateRoom from './pages/Rooms/updateRoom';
 import SectionPerCourse from './pages/Sections/SectionPerCourse';
 import ViewSection from './pages/Sections/ViewSection';
 import UpdateSection from './pages/Sections/UpdateSection';
+import UpdateCourse from './pages/Courses/updateCourse';
 // The structure holds the building, this file is our building that hosts the flats which are our pages
 
 function App() {
@@ -86,6 +87,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/updateSection" element={<ProtectedRoutes Cmp={UpdateSection} />} ></Route>
+          </Routes>
+          <Routes>
+            <Route path="/updateCourse" element={<ProtectedRoutes Cmp={UpdateCourse} />} ></Route>
           </Routes>
         </BrowserRouter>
       }

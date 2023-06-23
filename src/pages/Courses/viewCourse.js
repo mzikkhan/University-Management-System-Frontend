@@ -15,6 +15,11 @@ export default function ViewCourse() {
     navigate("/addSection", { state: { code: course.code, credits: course.credits } });
   }
 
+  // Update course
+  const updateSection = () => {
+    navigate("/updateCourse", { state: { code: course.code, credits: course.credits, title: course.title, type: course.type } });
+  }
+
   return (
     <div>
       <Navbar2 />
@@ -48,9 +53,7 @@ export default function ViewCourse() {
           </div>
           <div className="profile-actions" >
             <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px' }} onClick={addSection}>Add Section</button>
-            <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'black' }}>Update Section</button>
-            <button className="btn btn-danger" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'red' }}>Delete Section</button>
-            <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'blue' }}>Update Course</button>
+            <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'blue' }} onClick={updateSection}>Update Course</button>
           </div>
         </div>
         <CourseRoutineTable courseCode={course.code}/>
