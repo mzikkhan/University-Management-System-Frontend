@@ -18,6 +18,8 @@
     "csvtojson": "^2.0.10",
     "gl": "^6.0.2",
     "google-map-react": "^2.2.0",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.29",
     "lottie-react": "^2.4.0",
     "mapbox": "^1.0.0-beta10",
     "mapbox-gl": "^2.14.1",

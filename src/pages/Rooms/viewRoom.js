@@ -4,6 +4,7 @@ import { Avatar } from 'antd';
 import './viewRoom.css';
 import Footer from '../../components/Footer/Footer';
 import Navbar2 from '../../components/NavBar/Navbar2';
+import RoomRoutineTable from '../../components/roomTable';
 
 export default function ViewRoom() {
     const location = useLocation();
@@ -62,6 +63,7 @@ export default function ViewRoom() {
                         </div>
                     </div>
                 </div>
+            <RoomRoutineTable roomId={rooms._id} roomName={rooms.Rooms}/>
             </div>
             <Footer />
         </div>

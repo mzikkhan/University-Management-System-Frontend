@@ -4,11 +4,11 @@ import { Avatar } from 'antd';
 import './viewFaculty.css';
 import Footer from '../../components/Footer/Footer';
 import Navbar2 from '../../components/NavBar/Navbar2';
+import FacultyRoutineTable from '../../components/facultyTable';
 
 export default function ViewFaculty() {
   const location = useLocation();
   const { faculties } = location.state;
-
   return (
     <div>
       <Navbar2 />
@@ -64,6 +64,7 @@ export default function ViewFaculty() {
             </div>
           </div>
         </div>
+        <FacultyRoutineTable facultyInitial={faculties.FacultyInitial}/>
       </div>
       <Footer />
     </div>

@@ -8,6 +8,13 @@
     overflow-x: hidden;
 }
 
+.container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+  }
+  
+
 .profile-card {
     width: 650px;
     padding: 30px;
