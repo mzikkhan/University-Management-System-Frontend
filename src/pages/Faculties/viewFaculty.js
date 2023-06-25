@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Avatar } from 'antd';
 import './viewFaculty.css';
 import Footer from '../../components/Footer/Footer';
@@ -8,6 +8,17 @@ import Navbar2 from '../../components/NavBar/Navbar2';
 export default function ViewFaculty() {
   const location = useLocation();
   const { faculties } = location.state;
+
+  console.log(faculties.FacultyInitial)
+
+  console.log("hi")
+
+  const navigate = useNavigate()
+  const updateFacultyButton = (facultyInitial) => {
+    console.log("Hello")
+    console.log(facultyInitial)
+    navigate("/updateFaculty", { state: { FacultyInitial: facultyInitial } });
+  }
 
   return (
     <div>
@@ -59,8 +70,9 @@ export default function ViewFaculty() {
               <span className="profile-label">CreditCount:</span>
               <span className="profile-value">{faculties.CreditCount}</span>
             </div>
+
             <div className="profile-actions">
-              <button className="btn btn-primary">Update Details</button>
+              <button className="btn btn-primary" onClick={() => updateFacultyButton(faculties.FacultyInitial)}>Update Details</button>
             </div>
           </div>
         </div>

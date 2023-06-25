@@ -14,6 +14,11 @@ export default function ViewCourse() {
     navigate("/addSection", { state: { code: course.code, credits: course.credits } });
   }
 
+  // const navigate = useNavigate()
+  const updateCourseButton = () => {
+    navigate("/updateCourse", { state: { code: course.code } });
+  }
+
   return (
     <div>
       <Navbar2 />
@@ -49,7 +54,7 @@ export default function ViewCourse() {
             <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px' }} onClick={addSection}>Add Section</button>
             <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'black' }}>Update Section</button>
             <button className="btn btn-danger" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'red' }}>Delete Section</button>
-            <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'blue' }}>Update Course</button>
+            <button className="btn btn-primary" style={{ fontSize: '1rem', padding: '10px 10px', backgroundColor: 'blue' }} onClick={updateCourseButton}>Update Course</button>
           </div>
         </div>
       </div>
