@@ -65,7 +65,7 @@ export default function Courses() {
   );
   // Go to sections page
   const goToSectionsPage = (code) => {
-    navigate("/sectionPerCourse", { state: { code: code } });
+    navigate("/sections", { state: { code: code } });
   };
 
   const dropHandler = async (code, courseSections) => {

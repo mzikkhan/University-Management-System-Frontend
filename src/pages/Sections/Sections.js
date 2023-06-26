@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Footer from '../../components/Footer/Footer';
 import Navbar2 from '../../components/NavBar/Navbar2';
-import "./Sections.css";
+import "./SectionPerCourse.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from 'sweetalert2';

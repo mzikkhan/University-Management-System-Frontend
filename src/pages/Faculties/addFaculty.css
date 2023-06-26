@@ -133,6 +133,7 @@ ul li button:hover {
 
 .move-text2 {
     position: absolute;
+    top: 9%;
     animation: moveLeftToRight 5s linear infinite;
     font-family: Arial, sans-serif;
     /* Change the font family */

@@ -108,6 +108,7 @@
 
 .move-text {
     position: absolute;
+    top: 9%;
     animation: moveLeftToRight 10s linear infinite;
     font-family: Arial, sans-serif;
     /* Change the font family */
