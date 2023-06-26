@@ -81,6 +81,9 @@ function App() {
             <Route path="/importRoom" element={<ProtectedRoutes Cmp={ImportRoom} />} ></Route>
           </Routes>
           <Routes>
+            <Route path="/sectionPerCourse" element={<ProtectedRoutes Cmp={SectionPerCourse} />} ></Route>
+          </Routes>
+          <Routes>
             <Route path="/viewSection" element={<ProtectedRoutes Cmp={ViewSection} />} ></Route>
           </Routes>
           <Routes>
